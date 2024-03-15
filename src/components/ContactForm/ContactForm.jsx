@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from '../../redux/selectors';
-import { addContact } from '../../redux/contactSlice';
+import { selectContacts } from '../../redux/selectors';
+import { addContact } from '../../redux/operations';
 import { Form, Input, Button, Wrapper } from './ContactForm.styled';
 
 export const ContactForm = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const contacts = useSelector(getContacts);
+  const [poneNumber, setNumber] = useState('');
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = event => {
@@ -17,8 +17,9 @@ export const ContactForm = () => {
       contacts.some(contact => contact.name.toLowerCase() === normalizedName)
     ) {
       alert(`${name} is already in your phonebook.`);
+      return;
     }
-    dispatch(addContact({ name, number }));
+    dispatch(addContact({ name, poneNumber }));
     setName('');
     setNumber('');
   };
@@ -51,7 +52,7 @@ export const ContactForm = () => {
           type="tel"
           name="number"
           id="number"
-          value={number}
+          value={poneNumber}
           onChange={handleChange}
           pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
